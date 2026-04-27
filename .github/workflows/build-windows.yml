@@ -1,0 +1,50 @@
+name: Build Windows Release
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Enable Windows desktop
+        run: flutter config --enable-windows-desktop
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Analyze project
+        run: dart analyze
+
+      - name: Run tests
+        run: flutter test
+
+      - name: Build Windows release
+        run: flutter build windows --release
+
+      - name: Create release zip
+        shell: powershell
+        run: |
+          New-Item -ItemType Directory -Force -Path dist
+          Compress-Archive `
+            -Path build\windows\x64\runner\Release\* `
+            -DestinationPath dist\8086_Assembly_Simulator_Windows.zip `
+            -Force
+
+      - name: Upload Windows artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: 8086_Assembly_Simulator_Windows
+          path: dist/8086_Assembly_Simulator_Windows.zip
