@@ -1,266 +1,40 @@
-# 🚀 CemuX — Development Tasks Roadmap
+# CemuX development roadmap
 
-**Project:** CemuX (CPU Emulator)  
-**Goal:** Build a clean, extensible, Flutter-based CPU simulator (MVP → Advanced)  
-**Strategy:** Phase-based execution with clear deliverables  
+This roadmap separates functionality verified in the repository from work that has not been implemented. Status reflects the source and tests reviewed on 2026-10-22; it is not a release plan or a claim about work in progress.
 
----
+For current setup and feature details, see the [README](README.md). The [PRD](CemuX_PRD.md) is an earlier proposal and is not authoritative for current behavior.
 
-# 🧠 Phase 0 — Project Setup (Foundation)
+## Implemented
 
-## 🎯 Goal
-Initialize clean Flutter project with scalable architecture
+Implementation status was verified against `lib/`. Existing tests cover CPU execution, registers, memory, parsing, controller behavior, and a widget.
 
-## ✅ Tasks
-- [ ] Create Flutter project (`cemux`)
-- [ ] Setup folder structure:
-  - [ ] `lib/core/`
-  - [ ] `lib/features/cpu/`
-  - [ ] `lib/features/editor/`
-  - [ ] `lib/features/ui/`
-- [ ] Setup state management (GetX or preferred)
-- [ ] Setup theme (dark mode default)
-- [ ] Configure app name:
-  - [ ] Display: **CemuX**
-- [ ] Remove default Flutter boilerplate
+- [x] Flutter app with a GetX controller separating UI actions from the Dart CPU engine.
+- [x] CPU state with `AX`, `BX`, `CX`, `DX`, byte register names, `PC`, and `IR`.
+- [x] Fixed-size memory model (32 integer cells by default), including bounds checks.
+- [x] Parser for the supported assembly-like syntax, with source-line-aware validation and `;` / `#` comments.
+- [x] Registry-based instruction dispatch and separate handlers for `MOV`, `XCHG`, `ADD`, `SUB`, `INC`, `DEC`, `MUL`, `DIV`, `AND`, `OR`, `XOR`, `ROL`, `ROR`, and `RET`.
+- [x] Visible fetch, decode, and execute phases; manual phase stepping; timed run/pause; reset; and an auto-run instruction guard.
+- [x] Editor with syntax highlighting, line numbers, current/error line feedback, suggestions, and instruction insertion controls.
+- [x] CPU state panels and built-in example programs.
+- [x] Tests for CPU execution, registers, memory, parsing, controller behavior, and a widget.
 
----
+`ROL` and `ROR` currently validate a rotate count of one only. The implemented instruction set is a limited teaching model and is not a complete 8086 implementation.
 
-# ⚙️ Phase 1 — Core CPU Engine (MVP)
+## In progress
 
-## 🎯 Goal
-Build pure Dart CPU engine (NO Flutter dependency)
+No in-progress work is identified by the reviewed repository documentation or implementation. Update this section when a specific, active effort is confirmed; do not use it to imply unverified progress.
 
-## ✅ Tasks
+## Planned
 
-### 🔹 CPU State
-- [ ] Create Registers model:
-  - [ ] R1, R2, R3, R4
-  - [ ] PC (Program Counter)
-  - [ ] IR (Instruction Register)
-- [ ] Create Memory model:
-  - [ ] Fixed array (size: 32)
-  - [ ] Read / Write methods
-- [ ] Create CPU State object
+The following items appeared as future work in the earlier roadmap or product proposal and are not represented as implemented by the current source:
 
----
+- [ ] Compare instructions and processor flags.
+- [ ] Conditional branches that use flags.
+- [ ] Stack pointer, stack operations, and subroutine support.
+- [ ] Breakpoints and reverse/step-back execution.
+- [ ] Larger memory and an expanded memory viewer.
+- [ ] Additional instruction semantics and addressing modes, with a clearly defined compatibility target.
+- [ ] Confirmed platform support/build matrix and release documentation.
+- [ ] Screenshots or demo materials, once created and approved for publication.
 
-### 🔹 Instruction System (CRITICAL)
-- [ ] Implement Instruction Registry (Map-based)
-- [ ] Create base Instruction Handler interface
-- [ ] Implement MVP Instructions:
-  - [ ] LOAD
-  - [ ] STORE
-  - [ ] MOV
-  - [ ] ADD
-  - [ ] SUB
-  - [ ] AND
-  - [ ] OR
-  - [ ] NOT
-  - [ ] JMP
-
----
-
-### 🔹 Execution Engine
-- [ ] Implement Fetch logic
-- [ ] Implement Decode logic
-- [ ] Implement Execute logic
-- [ ] Implement cycle runner (step)
-- [ ] Implement auto-run loop
-- [ ] Implement max cycle guard (prevent infinite loops)
-
----
-
-### 🔹 Parser
-- [ ] Parse text into instructions
-- [ ] Strip comments (`;`, `#`)
-- [ ] Validate syntax
-- [ ] Normalize instructions
-
----
-
-# 🔄 Phase 2 — State Management Layer
-
-## 🎯 Goal
-Connect CPU engine to UI safely
-
-## ✅ Tasks
-- [ ] Create GetX Controller (CPUController)
-- [ ] Expose observable state:
-  - [ ] Registers
-  - [ ] Memory
-  - [ ] Current instruction
-  - [ ] Current phase (FETCH / DECODE / EXECUTE)
-- [ ] Implement controller actions:
-  - [ ] loadProgram()
-  - [ ] step()
-  - [ ] autoRun()
-  - [ ] pause()
-  - [ ] reset()
-
----
-
-# 🧪 Phase 3 — Code Editor
-
-## 🎯 Goal
-Allow user to write and edit assembly code
-
-## ✅ Tasks
-- [ ] Build code editor UI:
-  - [ ] Multi-line input
-  - [ ] Line numbers
-- [ ] Highlight current executing line
-- [ ] Add basic syntax highlighting:
-  - [ ] Instructions
-  - [ ] Registers
-  - [ ] Numbers
-- [ ] Show error messages:
-  - [ ] Invalid instruction
-  - [ ] Invalid operand
-
----
-
-# 🧠 Phase 4 — CPU Visualization UI
-
-## 🎯 Goal
-Make execution understandable visually
-
-## ✅ Tasks
-
-### 🔹 Registers Panel
-- [ ] Display R1–R4
-- [ ] Display PC and IR
-- [ ] Animate changed values
-
----
-
-### 🔹 Memory Panel
-- [ ] Show memory cells (0–31)
-- [ ] Highlight updated cells
-- [ ] Show values clearly
-
----
-
-### 🔹 Execution Panel
-- [ ] Show:
-  - [ ] Current Instruction
-  - [ ] Operation description
-- [ ] Show phase:
-  - [ ] FETCH
-  - [ ] DECODE
-  - [ ] EXECUTE
-
----
-
-### 🔹 Focus Mode
-- [ ] Step animation:
-  - [ ] Highlight instruction
-  - [ ] Show decode
-  - [ ] Show execution result
-
----
-
-# 🎮 Phase 5 — Execution Controls
-
-## 🎯 Goal
-Control simulation behavior
-
-## ✅ Tasks
-- [ ] Add buttons:
-  - [ ] Load
-  - [ ] Step
-  - [ ] Run
-  - [ ] Pause
-  - [ ] Reset
-- [ ] Add speed control (Auto mode)
-- [ ] Disable invalid actions during execution
-
----
-
-# 🧪 Phase 6 — Testing & Validation
-
-## 🎯 Goal
-Ensure system correctness
-
-## ✅ Tasks
-- [ ] Create test programs:
-  - [ ] Arithmetic test
-  - [ ] Logic test
-  - [ ] Jump test
-- [ ] Validate:
-  - [ ] Register updates
-  - [ ] Memory writes
-  - [ ] Jump behavior
-- [ ] Test edge cases:
-  - [ ] Invalid instruction
-  - [ ] Memory overflow
-  - [ ] Infinite loop
-
----
-
-# 🎨 Phase 7 — UI Polish (Competition Level)
-
-## 🎯 Goal
-Make it visually professional
-
-## ✅ Tasks
-- [ ] Improve layout (emu8086 style)
-- [ ] Add transitions/animations
-- [ ] Improve spacing & alignment
-- [ ] Ensure responsive design (mobile + desktop)
-- [ ] Add dark/light toggle (optional)
-
----
-
-# 🚀 Phase 8 — Advanced Features (Post-MVP)
-
-## 🎯 Goal
-Prepare for expansion
-
-## ✅ Tasks
-
-### 🔹 Instruction Expansion
-- [ ] Add CMP
-- [ ] Add Flags (ZERO, NEGATIVE)
-- [ ] Add Conditional Jumps (JZ, JNZ)
-
----
-
-### 🔹 Stack System
-- [ ] Add SP register
-- [ ] Implement PUSH / POP
-
----
-
-### 🔹 Debugging Tools
-- [ ] Add Breakpoints
-- [ ] Add Step Back (state snapshots)
-- [ ] Add Execution history
-
----
-
-### 🔹 Memory Upgrade
-- [ ] Expand memory (256 cells)
-- [ ] Add scrollable memory viewer
-
----
-
-# 📊 Phase 9 — Finalization
-
-## 🎯 Goal
-Prepare for presentation / competition
-
-## ✅ Tasks
-- [ ] Clean codebase
-- [ ] Add README.md
-- [ ] Add screenshots
-- [ ] Add demo scripts
-- [ ] Optimize performance
-- [ ] Build release version
-
----
-
-# 🏁 FINAL GOAL
-
-```text
-CemuX = Clean + Educational + Extensible CPU Emulator
+These are candidate directions, not scheduled commitments. Prioritize educational clarity and tests when selecting future work.
