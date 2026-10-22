@@ -5,6 +5,8 @@
 **Status:** Draft for Review
 **Platform:** Flutter (Mobile & Desktop)
 
+> **Historical proposal:** This document records an earlier product design and is not a specification of the current implementation. Its original MVP register set, instruction set, and feature descriptions differ from the code. For verified current behavior, see the [README](README.md) and [development roadmap](CemuX_Tasks_Roadmap.md).
+
 ---
 
 ## 1. Executive Summary
